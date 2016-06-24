@@ -141,6 +141,9 @@ local function main()
 						sleep(2)
 						os.reboot()
 					elseif yP == 6 then
+						x, y = term.getSize()
+						local nWindow3 = window.create(term.current(), 1,2,x,y-1, true)
+						term.redirect(nWindow3)
 						term.clear()
 						term.setBackgroundColor(colors.gray)
 						term.setTextColor(colors.white)
@@ -153,6 +156,8 @@ local function main()
 						print("")
 						print("Press any key to continue...")
 						os.pullEvent("char" or "mouse_click")
+						term.redirect(term.native())
+						nWindow3.setVisible(false)
 						printed = false
 						completeDraw()
 					else
