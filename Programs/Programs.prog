@@ -1,0 +1,25 @@
+local ProgramList = fs.list("Xinnux/Programs/")
+local ProgramListed = 0
+local PLine = 1
+local as = 1
+term.clear()
+term.setCursorPos(1,1)
+term.setBackgroundColor(colors.white)
+term.setTextColor(colors.black)
+term.clear()
+
+for _, file in ipairs(ProgramList) do
+	if string.find( file, ".prog") then
+		ProgramListed = ProgramListed + 1
+		local s = file
+		s = s:gsub(".prog", "")
+		print(s)
+		if ProgramListed%2 == 1 then
+			PLine = PLine + 1
+			as = 1
+		else
+			as = string.len(s) + 2;
+		end
+		term.setCursorPos(as,PLine)
+	end
+end

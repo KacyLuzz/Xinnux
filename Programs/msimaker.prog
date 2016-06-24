@@ -1,0 +1,152 @@
+--MSI-Maker FIXED
+--Made by Piorjade
+
+--Variablen
+mainFolder = "/Project/"
+destination = "/zip"
+show = false
+
+
+--Funktionen
+function compile(folder, ziel)
+	if folder == nil then
+		folder = mainFolder
+	else
+		mainFolder = folder
+	end
+	if ziel == nil then
+		ziel = destination
+	else
+		destination = ziel
+	end
+	directory = folder
+	files = {}
+	fileData = {}
+	folders = {}
+	currDir = ""
+	running = true
+	function search(directory)
+		if show == nil then show = false end
+		local fileList = fs.list(mainFolder..directory)
+		for _, file in ipairs(fileList) do
+			if show then print(file) end
+			isDir = fs.isDir(mainFolder..directory..file)
+			if isDir then
+				if file == "rom" then
+					if show then print("Skipping /rom"); sleep(2) end
+				else
+					term.setTextColor(colors.lime)
+					if show then print("folder") end
+					term.setTextColor(colors.white)
+					table.insert(folders, directory..file)
+				end
+			else
+				term.setTextColor(colors.yellow)
+				if show then print("file") end
+				term.setTextColor(colors.white)
+				table.insert(files, directory..file)
+				local f = fs.open(mainFolder..directory..file,"r")
+				local inhalt = f.readAll()
+				f.close()
+				table.insert(fileData, inhalt)
+			end
+
+		end
+		for _, file in ipairs(fileList) do
+			
+		end
+	end
+	search("")
+	for _, fldr in ipairs(folders) do
+		term.setTextColor(colors.lightBlue)
+		if show then print(mainFolder..fldr) end
+		term.setTextColor(colors.white)
+		search(fldr.."/")
+	end
+
+	local file = fs.open(ziel,"w")
+	file.write("files = "..textutils.serialize(files).."\n")
+	file.close()
+	local file = fs.open(ziel, "a")
+	file.write("fileData = "..textutils.serialize(fileData).."\n")
+	file.write("folders = "..textutils.serialize(folders).."\n")
+	file.write("local args = {...}\n")
+	file.write("if #args < 1 then\n")
+	file.write("  print('Usage: <file> <destination>')\n")
+	file.write("else\n")
+	file.write("  args[1] = args[1]..'/'")
+	file.write("  for _, folder in ipairs(folders) do\n")
+	file.write("    fs.makeDir(args[1]..folder)\n")
+	file.write("  end\n")
+	file.write("  for _, file in ipairs(files) do\n")
+	file.write("    local file = fs.open(args[1]..file, 'w')\n")
+	file.write("    file.write(fileData[_])\n")
+	file.write("    file.close()\n")
+	file.write("  end\n")
+	file.write("end")
+	file.close()
+end
+
+--Code
+
+local args = {...}
+
+if #args < 1 then
+	if fs.exists("/Project/") then
+		compile()
+	else
+		print("/Project/ not found!")
+		print("Usage: <thisfile> [folderWithProject] [destination]")
+	end
+elseif #args > 3 then
+	print("Too many arguments!")
+	print("Usage: <thisfile> [folderWithProject] [destination]")
+elseif #args == 1 then
+	if args[1] == "show" then
+		if fs.exists("/Project/") then
+			show = true
+			compile()
+		else
+			print("/Project/ not found!")
+			print("Usage: <thisfile> [folderWithProject] [destination]")
+		end
+	elseif fs.exists(args[1]) then
+		compile(args[1])
+	else
+		print(args[1].." not found!")
+		print("Usage: <thisfile> [folderWithProject] [destination]")
+	end
+elseif #args == 2 then
+	if args[2] == "show" then
+		if fs.exists(args[1]) then
+			show = true
+			compile(args[1])
+		else
+			print(args[1].." not found!")
+			print("Usage: <thisfile> [folderWithProject] [destination]")
+		end
+	elseif fs.exists(args[1]) then
+		if fs.exists(args[2]) then
+			print("Destinationfile already exists.")
+			print("Usage: <thisfile> [folderWithProject] [destination]")
+		else
+			compile(args[1], args[2])
+		end
+	else
+		print(args[1].." not found!")
+		print("Usage: <thisfile> [folderWithProject] [destination]")
+	end
+elseif #args == 3 then
+	if args[3] == "show" then show = true end
+	if fs.exists(args[1]) then
+		if fs.exists(args[2]) then
+			print("Destinationfile already exists.")
+			print("Usage: <thisfile> [folderWithProject] [destination]")
+		else
+			compile(args[1], args[2])
+		end
+	else
+		print(args[1].." not found!")
+		print("Usage: <thisfile> [folderWithProject] [destination]")
+	end
+end

@@ -75,21 +75,8 @@ else
 	--wait... it's down there
 end
 shell.run("logos/kernel")
-local lIDE = function()
-	x, y = term.getSize()
-	local nWindow1 = window.create(term.current(), 1,2,x,y-1, true)
-	term.redirect(nWindow1)
-	shell.run("Xinnux/Programs/LuaIDE")
-	term.redirect(term.native())
-	nWindow1.setVisible(false)
-end
-local fb = function()
-	x, y = term.getSize()
-	local nWindow1 = window.create(term.current(), 1,2,x,y-1, true)
-	term.redirect(nWindow1)
-	shell.run("Xinnux/Programs/fileB")
-	term.redirect(term.native())
-	nWindow1.setVisible(false)
+local function progms() 
+	shell.run('Xinnux/Programs/Programs.prog')
 end
 
 local function main()
@@ -106,9 +93,7 @@ local function main()
 
 					term.setCursorPos(1,2)
 					term.setBackgroundColor(colors.lightGray)
-					print("Text Editor ")
-					print("Run Program ")
-					print("File Browser")
+					print("Programs    ")
 					print("Shutdown    ")
 					print("Restart     ")
 					print("------------")
@@ -119,38 +104,10 @@ local function main()
 			
 				if xP <= 12 and xP >= 1 then
 					if yP == 2 then
-						lIDE()
-						printed = false
-					elseif yP == 3 then
-						x, y = term.getSize()
-						local nWindow4 = window.create(term.current(),1,2,x,y-1)
-						term.redirect(nWindow4)
-						term.clear()
-						term.setBackgroundColor(colors.lightBlue)
-						term.setTextColor(colors.yellow)
-						term.clear()
-						term.setCursorPos(1,1)
-						print("Run Program:")
-						write(" ")
-						term.setCursorBlink(true)
-						read1 = read()
-						term.setCursorBlink(false)
-						--if fs.exists(read1) then
-							term.clear()
-							term.setCursorPos(1,1)
-							shell.run(read1)
-							
-						--else
-							--BSOD("Program not found!")
-						--end
-						term.redirect(term.native())
-						nWindow4.setVisible = false
-						printed = false
-					elseif yP == 4 then
-						fb()
+						progms()
 						printed = false
 						completeDraw()
-					elseif yP == 5 then
+					elseif yP ==3 then
 						
 						
 						term.setBackgroundColor(colors.gray)
@@ -164,7 +121,7 @@ local function main()
 						print("Thanks for using Xinnux by Kacy")
 						sleep(2)
 						os.shutdown()
-					elseif yP == 6 then
+					elseif yP == 4 then
 						
 						
 						term.setBackgroundColor(colors.gray)
@@ -178,7 +135,7 @@ local function main()
 						print("Thanks for using Xinnux by Kacy")
 						sleep(2)
 						os.reboot()
-					elseif yP == 8 then
+					elseif yP == 6 then
 						term.clear()
 						term.setBackgroundColor(colors.gray)
 						term.setTextColor(colors.white)
@@ -189,12 +146,7 @@ local function main()
 						print("Disk Space:")
 						print("  Free Space: " .. string.sub(fs.getFreeSpace("/")/1024/1024,1,5) .. "MB    Total Space: 1 MB")
 						print("")
-						print("")
-						print("OS is opening to community development!")
-						print("Credits: tomass1996 - For his incredibly useful hash API(String Utils API)")
-						print("         GravityScore - For his SHA256 Algorithim calculator")
-						print("         Darkrising - For darkchat used in the OS")
-						print("Press Space to continue...")
+						print("Press any key to continue...")
 						os.pullEvent("char" or "mouse_click")
 						printed = false
 						completeDraw()
