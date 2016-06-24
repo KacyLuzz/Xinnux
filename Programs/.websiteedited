@@ -1,0 +1,18 @@
+sleep(0) --So you don't go too fast
+write("Search For")
+input = read()
+rednet.broadcast("rednet.api.ping.searchengine")
+while true do
+local a, i = rednet.receive(0)
+if i then
+if input == "" then
+print("Search: " ..i)
+else
+if string.find(i, input) then
+print("Search: " ..i)
+end
+end
+else
+break
+end
+end
