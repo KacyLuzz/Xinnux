@@ -12,18 +12,7 @@ function rightClick(xP, yP)
 	event, button, xPos, yPos = oldOsPullEvent("mouse_click")
 	if button == 1 then
 		if xPos >= xP and xPos <= xP+11 and yPos == yP then
-			x, y = term.getSize()
-			local nWindow3 = window.create(term.current(), 1,2,x,y-1, true)
-			term.redirect(nWindow3)
-			term.clear()
-			term.setBackgroundColor(colors.black)
-			term.clear()
-			term.setCursorPos(1,1)
-			shell.run("shell")
-			term.redirect(term.native())
-			nWindow3.setVisible(false)
-			printed = false
-			completeDraw()
+			terminal()
 		end
 	else
 		completeDraw()
@@ -79,6 +68,20 @@ else
 	--wait... it's down there
 end
 shell.run("logos/kernel")
+local function terminal()
+	x, y = term.getSize()
+	local nWindow2 = window.create(term.current(), 1,2,x,y-1, true)
+	term.redirect(nWindow2)
+	term.clear()
+	term.setBackgroundColor(colors.black)
+	term.clear()
+	term.setCursorPos(1,1)
+	shell.run("rom/programs/advanced/multishell")
+	term.redirect(term.native())
+	nWindow2.setVisible(false)
+	printed = false
+	completeDraw()
+end
 local function fb()
 	x, y = term.getSize()
 	local nWindow3 = window.create(term.current(), 1,2,x,y-1, true)
@@ -105,6 +108,8 @@ local function main()
 					term.setCursorPos(1,2)
 					term.setBackgroundColor(colors.lightGray)
 					print("File Browser")
+					print("Shell       ")
+					print("------------")
 					print("Shutdown    ")
 					print("Restart     ")
 					print("------------")
@@ -118,7 +123,11 @@ local function main()
 						fb()
 						printed = false
 						completeDraw()
-					elseif yP ==3 then
+					elseif yP == 3 then
+						terminal()
+						printed = false
+						completeDraw()
+					elseif yP ==5 then
 						
 						
 						term.setBackgroundColor(colors.gray)
@@ -132,7 +141,7 @@ local function main()
 						print("Thanks for using Xinnux by Kacy")
 						sleep(2)
 						os.shutdown()
-					elseif yP == 4 then
+					elseif yP == 6 then
 						
 						
 						term.setBackgroundColor(colors.gray)
@@ -146,7 +155,7 @@ local function main()
 						print("Thanks for using Xinnux by Kacy")
 						sleep(2)
 						os.reboot()
-					elseif yP == 6 then
+					elseif yP == 8 then
 						x, y = term.getSize()
 						local nWindow3 = window.create(term.current(), 1,2,x,y-1, true)
 						term.redirect(nWindow3)
