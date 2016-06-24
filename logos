@@ -12,11 +12,17 @@ function rightClick(xP, yP)
 	event, button, xPos, yPos = oldOsPullEvent("mouse_click")
 	if button == 1 then
 		if xPos >= xP and xPos <= xP+11 and yPos == yP then
+			x, y = term.getSize()
+			local nWindow3 = window.create(term.current(), 1,2,x,y-1, true)
+			term.redirect(nWindow3)
 			term.clear()
 			term.setBackgroundColor(colors.black)
 			term.clear()
 			term.setCursorPos(1,1)
 			shell.run("shell")
+			term.redirect(term.native())
+			nWindow3.setVisible(false)
+			printed = false
 			completeDraw()
 		end
 	else
