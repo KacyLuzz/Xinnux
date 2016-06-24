@@ -1,0 +1,174 @@
+local dir = ""
+local fileList = {}
+local fList = {}
+local dList = {}
+local offset = 0
+
+function drawSquare(x,y,x2,y2,color)
+  for xPos=x,x2 do
+    for yPos=y,y2 do
+      term.setBackgroundColor(color)
+      term.setCursorPos(xPos,yPos)
+      term.write(" ")
+    end
+  end
+  term.setBackgroundColor(colors.black)
+end
+
+function drawText(x,y,text,tColor,bColor)
+  term.setBackgroundColor(bColor)
+  term.setTextColor(tColor)
+  term.setCursorPos(x,y)
+  term.write(text)
+end
+
+function makeLists(path)
+  fileList = fs.list(path)
+  dList = {}
+  fList = {}
+  if string.len(dir) > 1 then
+    table.insert(dList, "..")
+  end
+  for i=1,#fileList do
+    if fs.isDir(path.."/"..fileList[i]) then
+      table.insert(dList, fileList[i])
+    else
+      table.insert(fList, fileList[i])
+    end
+  end
+end
+
+while true do
+  term.clear()
+  drawSquare(1,1,10,19,colors.gray)
+  drawSquare(10,1,51,19,colors.white)
+  drawSquare(1,1,51,1,colors.lightGray)
+  if string.len(dir) > 0 then
+    drawText(1,1,dir,colors.black,colors.lightGray)
+  else
+    drawText(1,1,"/",colors.black,colors.lightGray)
+  end
+  term.setCursorPos(1,1)
+  makeLists(dir)
+  for i=1,#dList do
+    if dList[i+offset] then
+      drawText(1,i+1,dList[i+offset],colors.white,colors.gray)
+    end
+  end
+  local pos = 1
+  local offSet = 0
+  for i=1,#fList do
+    if fList[i+(18*offset)] then
+      drawText(10+(offSet*15),i-(18*offSet)+1,fList[i+(18*offset)],colors.black,colors.white)
+    end
+    pos = pos + 1
+    if pos > 18 then
+      pos = 1
+      offSet = offSet + 1
+    end
+  end
+  local e,b,x,y = os.pullEvent()
+  if e == "mouse_click" then
+    if x<10 and y>1 then
+      if offset < 1 then
+        if dList[y-1] then
+          if dList[y-1] == ".." then
+            dir = fs.getDir(dir)
+          else
+            dir = dir.."/"..dList[y-1]
+          end
+          offset = 0
+        end
+      else
+        if dList[(y-1)+offset] then
+          if dList[(y-1)+offset] == ".." then
+            dir = fs.getDir(dir)
+          else
+            dir = dir.."/"..dList[(y-1)+offset]
+          end
+          offset = 0
+        end
+      end
+    elseif x>9 and x<25 and y>1 then
+      if offset < 1 then
+        if fList[y-1] then
+          term.setTextColor(colors.white)
+          term.setBackgroundColor(colors.black)
+          term.clear()
+          term.setCursorPos(1,1)
+          shell.run(dir.."/"..fList[y-1])
+        end
+      else
+        if fList[y+(offset*17)] then
+          term.setTextColor(colors.white)
+          term.setBackgroundColor(colors.black)
+          term.clear()
+          term.setCursorPos(1,1)
+          shell.run(dir.."/"..fList[y+(offset*17)])
+        end
+      end
+    elseif x>25 and x<40 and y>1 then
+      if offset < 1 then
+        if fList[y+17] then
+          term.setTextColor(colors.white)
+          term.setBackgroundColor(colors.black)
+          term.clear()
+          term.setCursorPos(1,1)
+          shell.run(dir.."/"..fList[y+17])
+        end
+      else
+        if fList[y+(offset*34)] then
+          term.setTextColor(colors.white)
+          term.setBackgroundColor(colors.black)
+          term.clear()
+          term.setCursorPos(1,1)
+          shell.run(dir.."/"..fList[y+(offset*34)])
+        end
+      end
+    elseif y == 1 then
+      drawSquare(1,1,51,1,colors.lightGray)
+      term.setCursorPos(1,1)
+      term.setTextColor(colors.black)
+      term.setBackgroundColor(colors.lightGray)
+      local input = read()
+      if fs.exists(input) then
+        if fs.isDir(input) then
+          dir = input
+        else
+          shell.run(input)
+        end
+      else
+        drawSquare(1,1,51,1,colors.lightGray)
+        drawText(1,1,"Invalid directory or file (Does not exist)", colors.black, colors.lightGray)
+        sleep(0.3)
+        os.pullEvent()
+      end
+    else
+      if offset < 1 then
+        if fList[y+34] then
+          term.setTextColor(colors.white)
+          term.setBackgroundColor(colors.black)
+          term.clear()
+          term.setCursorPos(1,1)
+          shell.run(dir.."/"..fList[y+34])
+        end
+      else
+        if fList[y+(offset*51)] then
+          term.setTextColor(colors.white)
+          term.setBackgroundColor(colors.black)
+          term.clear()
+          term.setCursorPos(1,1)
+          shell.run(dir.."/"..fList[y+(offset*51)])
+        end
+      end
+    end
+  elseif e == "mouse_scroll" then
+    if b == -1 then
+      if offset > 0 then
+        offset = offset - 1
+      end
+    elseif b == 1 then
+        offset = offset + 1
+    end
+  end
+end

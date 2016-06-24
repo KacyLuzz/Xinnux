@@ -12,13 +12,11 @@ function rightClick(xP, yP)
 	event, button, xPos, yPos = oldOsPullEvent("mouse_click")
 	if button == 1 then
 		if xPos >= xP and xPos <= xP+11 and yPos == yP then
-			x, y = term.getSize()
-			local nWindow3 = window.create(term.current(), 1,2,x,y-1, true)
-			term.redirect(nWindow3)
-			
+			term.clear()
+			term.setBackgroundColor(colors.black)
+			term.clear()
+			term.setCursorPos(1,1)
 			shell.run("shell")
-			term.redirect(term.native())
-			nWindow3.setVisible(false)
 			completeDraw()
 		end
 	else
@@ -75,8 +73,15 @@ else
 	--wait... it's down there
 end
 shell.run("logos/kernel")
-local function fb() 
-	shell.run('Xinnux/Programs/File Browser.prog')
+local function fb()
+	x, y = term.getSize()
+	local nWindow3 = window.create(term.current(), 1,2,x,y-1, true)
+	term.redirect(nWindow3)
+	shell.run('Xinnux/Programs/FileBrowser.prog')
+	term.redirect(term.native())
+	nWindow3.setVisible(false)
+	completeDraw()
+	printed = false
 end
 
 local function main()
@@ -93,7 +98,7 @@ local function main()
 
 					term.setCursorPos(1,2)
 					term.setBackgroundColor(colors.lightGray)
-					print("File Browser    ")
+					print("File Browser")
 					print("Shutdown    ")
 					print("Restart     ")
 					print("------------")
