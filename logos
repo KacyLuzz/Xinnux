@@ -89,7 +89,7 @@ local function main()
 		
 		if button == 1 then
 			if printed == false then
-				if xP >= 1 and xP <= 6 and yP == 1 then
+				if xP >= 2 and xP <= 7 and yP == 1 then
 
 					term.setCursorPos(1,2)
 					term.setBackgroundColor(colors.lightGray)
@@ -169,4 +169,8 @@ end
 local ok, err = pcall(main)
 if not ok then
 	BSOD(err)
+end
+
+while true do
+	drawBar()
 end

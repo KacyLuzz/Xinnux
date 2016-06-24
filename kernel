@@ -1,7 +1,9 @@
---Kernel V.1.0.0.12
+--Kernel V.1.0.0.18
 --Initial Release
 --Use with Xinnux only!
 
+local etime = os.time()
+local time = textutils.formatTime(etime, true)
 
 --Semi-Sandbox
 rootDirectory = "/userFiles/"
@@ -79,11 +81,11 @@ dofile = function( _sFile )
 end
 
 function drawBar()
-	term.setTextColor(colors.yellow)
-	term.setBackgroundColor(colors.cyan)
+	term.setTextColor(colors.white)
+	term.setBackgroundColor(colors.green)
 	
 	term.setCursorPos(1,1)
-	term.write("[Menu]                                                                     ")
+	term.write(" [Menu] Xinnux v0.0.2-alpha                   "..time.." ")
 end
 
 function drawBackground()
@@ -98,30 +100,8 @@ function completeDraw()
 	drawBackground()
 end
 
-getTaco = function()
-	term.setBackgroundColor(colors.gray)
-	term.setTextColor(colors.white)
-	term.clear()
-	term.setCursorPos(1,1)
-	print("LuaIDE is not available by default due to copyright, but we can download it for you. Y/N?")
-	t1 = read()
-	if t1 == "y" or t1 == "Y" then
-		shell.run("pastebin",  "get", "vyAZc6tJ", "LuaIDE")
-		settingsH = fs.open("Xinnux/cfg.ini", "w")
-		settingsH.writeLine(user1)
-		settingsH.writeLine(pass1)
-		settingsH.writeLine(passOnLogon)
-		settingsH.writeLine("yes")
-		settingsH.close()
-		tacoI = "yes"
-	else
-		print("Aborted...")
-		sleep(2)
-	end
-end
-
 getCurrentVer = function()
-	return "0.1"
+	return "0.0.2-alpha"
 end
 
 BSOD = function(error)
@@ -133,14 +113,31 @@ BSOD = function(error)
 	term.setCursorPos(1,1)
 	print("An error has occurred and the computer has to shutdown.")
 	print("")
-	print("The error is:")
+	print("Error :")
 	print(error)
 	print("")
-	print("If you modified this program, revert it to the default program")
+	print("Check if an update is available. This can fix the problem.")
 	print("")
 	print("")
 	print("")
-	print("Memory dump progress: 100%")
+	print("Memory dump progress: ")
+	term.setCursorPos(22,12)
+	print("2%")
+	sleep(1)
+	term.setCursorPos(22,12)
+	print("9%")
+	sleep(1)
+	term.setCursorPos(22,12)
+	print("22%")
+	sleep(1)
+	term.setCursorPos(22,12)
+	print("57%")
+	sleep(1)
+	term.setCursorPos(22,12)
+	print("99%")
+	sleep(1)
+	term.setCursorPos(22,12)
+	print("100%")
 	sleep(5)
 	os.reboot()
 end
@@ -191,5 +188,5 @@ end
 
 --Normal use functions please!
 os.version = function()
-	return "Xinnux V0.01"
+	return "Xinnux V0.0.2-alpha"
 end
