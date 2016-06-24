@@ -75,8 +75,8 @@ else
 	--wait... it's down there
 end
 shell.run("logos/kernel")
-local function progms() 
-	shell.run('Xinnux/Programs/Programs.prog')
+local function fb() 
+	shell.run('Xinnux/Programs/File Browser.prog')
 end
 
 local function main()
@@ -93,7 +93,7 @@ local function main()
 
 					term.setCursorPos(1,2)
 					term.setBackgroundColor(colors.lightGray)
-					print("Programs    ")
+					print("File Browser    ")
 					print("Shutdown    ")
 					print("Restart     ")
 					print("------------")
@@ -104,7 +104,7 @@ local function main()
 			
 				if xP <= 12 and xP >= 1 then
 					if yP == 2 then
-						progms()
+						fb()
 						printed = false
 						completeDraw()
 					elseif yP ==3 then
